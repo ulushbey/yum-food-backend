@@ -15,8 +15,9 @@ const productController: T = {};
 productController.getAllProducts = async (req: Request, res: Response) => {
   try {
     console.log("getAllProducts");
-    // console.log("req.member", req.member);
-    res.render("products");
+    const data = await productService.getAllProducts();
+    console.log("data", data);
+    res.render("products", { products: data });
   } catch (err) {
     console.log("Error, getAllProducts:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
@@ -55,6 +56,9 @@ productController.createNewProduct = async (
 productController.updateChosenProduct = async (req: Request, res: Response) => {
   try {
     console.log("updateChosenProduct");
+    const id = req.params.id;
+    const result = await productService.updateChosenProduct(id, req.body);
+    res.status(HttpCode.OK).json({ data: result });
   } catch (err) {
     console.log("Error, updateChosenProduct:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
